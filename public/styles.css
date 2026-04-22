@@ -1,0 +1,152 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f0f0f;
+  color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── SCREENS ── */
+.screen {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.hidden { display: none !important; }
+
+/* ── AUTH CARD ── */
+.auth-card {
+  background: #1a1a1a;
+  border: 1px solid #2e2e2e;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.logo { font-size: 2.5rem; letter-spacing: 0.2em; color: #fff; margin-bottom: 0.25rem; }
+.tagline { font-size: 0.85rem; color: #666; margin-bottom: 1.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+.tab {
+  flex: 1; padding: 9px;
+  border: 1px solid #2e2e2e;
+  border-radius: 8px;
+  background: transparent;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tab.active { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
+
+/* ── FORM ── */
+.form-section { text-align: left; }
+
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: 13px; color: #888; margin-bottom: 6px; }
+.field input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #111;
+  border: 1px solid #2e2e2e;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus { border-color: #555; }
+
+/* ── MESSAGES ── */
+.message {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  min-height: 0;
+}
+.message.success { background: #0d2b1a; color: #4ade80; border: 1px solid #166534; }
+.message.error   { background: #2b0d0d; color: #f87171; border: 1px solid #7f1d1d; }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%;
+  padding: 11px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-logout {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid #2e2e2e;
+  border-radius: 8px;
+  color: #888;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-logout:hover { border-color: #555; color: #fff; }
+
+/* ── GAME ── */
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 2rem;
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 14px;
+  color: #888;
+}
+
+.game-title { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.05em; }
+.status-msg { font-size: 14px; color: #aaa; min-height: 20px; }
+
+/* ── BOARD ── */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 8px;
+}
+
+.cell {
+  background: #1a1a1a;
+  border: 1px solid #2e2e2e;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+.cell:hover:not(.taken) { background: #222; }
+.cell.taken { cursor: default; }
+.cell.x   { color: #60a5fa; }
+.cell.o   { color: #f472b6; }
+.cell.win { background: #1a2b1a; border-color: #4ade80; }

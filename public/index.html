@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- AUTH SCREEN — shown when logged out -->
+  <div id="auth-screen" class="screen">
+    <div class="auth-card">
+      <h1 class="logo">✕ ○</h1>
+      <p class="tagline">Tic Tac Toe</p>
+
+      <div class="tabs">
+        <button class="tab active" id="tab-login" onclick="showTab('login')">Login</button>
+        <button class="tab" id="tab-register" onclick="showTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-form" class="form-section">
+        <div class="field">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" placeholder="Enter your username" />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password" />
+        </div>
+        <div id="login-message" class="message"></div>
+        <button class="btn-primary" onclick="handleLogin()">Login</button>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form" class="form-section hidden">
+        <div class="field">
+          <label for="reg-username">Username</label>
+          <input type="text" id="reg-username" placeholder="Choose a username" />
+        </div>
+        <div class="field">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" placeholder="Choose a password" />
+        </div>
+        <div class="field">
+          <label for="reg-confirm">Confirm Password</label>
+          <input type="password" id="reg-confirm" placeholder="Repeat your password" />
+        </div>
+        <div id="register-message" class="message"></div>
+        <button class="btn-primary" onclick="handleRegister()">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN — shown when logged in -->
+  <div id="game-screen" class="screen hidden">
+    <div class="game-wrapper">
+      <div class="game-header">
+        <span id="welcome-msg"></span>
+        <button class="btn-logout" onclick="handleLogout()">Logout</button>
+      </div>
+
+      <h2 class="game-title">Tic Tac Toe</h2>
+      <p id="status-msg" class="status-msg">Your turn (X)</p>
+
+      <div class="board" id="board">
+        <div class="cell" onclick="handleMove(0)"></div>
+        <div class="cell" onclick="handleMove(1)"></div>
+        <div class="cell" onclick="handleMove(2)"></div>
+        <div class="cell" onclick="handleMove(3)"></div>
+        <div class="cell" onclick="handleMove(4)"></div>
+        <div class="cell" onclick="handleMove(5)"></div>
+        <div class="cell" onclick="handleMove(6)"></div>
+        <div class="cell" onclick="handleMove(7)"></div>
+        <div class="cell" onclick="handleMove(8)"></div>
+      </div>
+
+      <button class="btn-primary" style="max-width:200px" onclick="resetGame()">New Game</button>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

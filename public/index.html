@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- AUTH SCREEN — shown when logged out -->
+  <!-- AUTH SCREEN -->
   <div id="auth-screen" class="screen">
     <div class="auth-card">
       <h1 class="logo">✕ ○</h1>
@@ -19,7 +19,6 @@
         <button class="tab" id="tab-register" onclick="showTab('register')">Register</button>
       </div>
 
-      <!-- Login Form -->
       <div id="login-form" class="form-section">
         <div class="field">
           <label for="login-username">Username</label>
@@ -33,7 +32,6 @@
         <button class="btn-primary" onclick="handleLogin()">Login</button>
       </div>
 
-      <!-- Register Form -->
       <div id="register-form" class="form-section hidden">
         <div class="field">
           <label for="reg-username">Username</label>
@@ -53,17 +51,37 @@
     </div>
   </div>
 
-  <!-- GAME SCREEN — shown when logged in -->
+  <!-- GAME SCREEN -->
   <div id="game-screen" class="screen hidden">
     <div class="game-wrapper">
-      <div class="game-header">
-        <span id="welcome-msg"></span>
+
+      <!-- Top bar with username -->
+      <div class="topbar">
+        <div class="user-badge">
+          <div class="avatar" id="player-initial">?</div>
+          <span id="player-name">Player</span>
+        </div>
         <button class="btn-logout" onclick="handleLogout()">Logout</button>
       </div>
 
       <h2 class="game-title">Tic Tac Toe</h2>
-      <p id="status-msg" class="status-msg">Your turn (X)</p>
 
+      <!-- Scoreboard -->
+      <div class="scoreboard">
+        <div class="score-box">
+          <span class="score-label x-color">X</span>
+          <span class="score-num" id="score-x">0</span>
+        </div>
+        <div class="score-divider">vs</div>
+        <div class="score-box">
+          <span class="score-label o-color">O</span>
+          <span class="score-num" id="score-o">0</span>
+        </div>
+      </div>
+
+      <p id="status-msg" class="status-msg">X's turn</p>
+
+      <!-- Board -->
       <div class="board" id="board">
         <div class="cell" onclick="handleMove(0)"></div>
         <div class="cell" onclick="handleMove(1)"></div>

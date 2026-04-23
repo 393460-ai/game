@@ -1,16 +1,8 @@
 // ═══════════════════════════════════════════════════════
 //  MAIN.JS — Auth + Game logic
-//  HOW IT WORKS:
-//  1. Page loads → ask server "am I logged in?" (/me)
-//  2. Server checks the session cookie it stored
-//  3. Show auth screen or game screen based on answer
 // ═══════════════════════════════════════════════════════
 
-
 // ── ON PAGE LOAD ─────────────────────────────────────────
-// This runs immediately when the page opens.
-// We ask the server if the user already has a valid session
-// (e.g. they logged in yesterday and the session is still alive)
 window.addEventListener('DOMContentLoaded', async () => {
   const res = await fetch('/me');
   const data = await res.json();
@@ -22,11 +14,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-
 // ── SCREEN SWITCHING ─────────────────────────────────────
-// We only have two screens (auth and game).
-// We hide/show them by toggling the 'hidden' CSS class.
-
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
@@ -41,17 +29,17 @@ function showTab(tab) {
 }
 
 function showGameScreen(username) {
-  document.getElementById('welcome-msg').textContent = 'Hi, ' + username + '!';
+  document.getElementById('player-name').textContent = username;
+  document.getElementById('player-initial').textContent = username.charAt(0).toUpperCase();
   showScreen('game-screen');
   resetGame();
 }
 
-
-// ── MESSAGES (error / success banners) ───────────────────
+// ── MESSAGES ─────────────────────────────────────────────
 function showMessage(id, text, type) {
   const el = document.getElementById(id);
   el.textContent = text;
-  el.className = 'message ' + type; // 'message error' or 'message success'
+  el.className = 'message ' + type;
 }
 
 function clearMessages() {
@@ -62,10 +50,7 @@ function clearMessages() {
   });
 }
 
-
-// ── LOGIN ────────────────────────────────────────────────
-// Sends username + password to POST /login
-// Server checks users.json, creates a session if correct
+// ── LOGIN ─────────────────────────────────────────────────
 async function handleLogin() {
   const username = document.getElementById('login-username').value.trim();
   const password = document.getElementById('login-password').value;
@@ -80,25 +65,19 @@ async function handleLogin() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
     });
-
     const data = await res.json();
-
     if (data.success) {
       showMessage('login-message', 'Welcome back!', 'success');
       setTimeout(() => showGameScreen(data.username), 600);
     } else {
       showMessage('login-message', data.message, 'error');
     }
-
   } catch (err) {
     showMessage('login-message', 'Could not reach server.', 'error');
   }
 }
 
-
 // ── REGISTER ─────────────────────────────────────────────
-// Sends username + password to POST /register
-// Server validates, writes to users.json, creates a session
 async function handleRegister() {
   const username = document.getElementById('reg-username').value.trim();
   const password = document.getElementById('reg-password').value;
@@ -117,24 +96,19 @@ async function handleRegister() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
     });
-
     const data = await res.json();
-
     if (data.success) {
       showMessage('register-message', 'Account created!', 'success');
       setTimeout(() => showGameScreen(data.username), 600);
     } else {
       showMessage('register-message', data.message, 'error');
     }
-
   } catch (err) {
     showMessage('register-message', 'Could not reach server.', 'error');
   }
 }
 
-
 // ── LOGOUT ───────────────────────────────────────────────
-// Tells server to destroy the session, then shows auth screen
 async function handleLogout() {
   await fetch('/logout', { method: 'POST' });
   document.getElementById('login-username').value = '';
@@ -144,44 +118,43 @@ async function handleLogout() {
   showScreen('auth-screen');
 }
 
-
 // ═══════════════════════════════════════════════════════
 //  GAME LOGIC
 // ═══════════════════════════════════════════════════════
 
-let board = Array(9).fill(null); // 9 cells, null = empty
+let board = Array(9).fill(null);
 let currentPlayer = 'X';
 let gameOver = false;
+let scores = { X: 0, O: 0 };
 
 const WIN_PATTERNS = [
-  [0,1,2], [3,4,5], [6,7,8], // rows
-  [0,3,6], [1,4,7], [2,5,8], // columns
-  [0,4,8], [2,4,6]           // diagonals
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
 ];
 
 function handleMove(index) {
-  if (gameOver || board[index]) return; // ignore if game over or cell taken
+  if (gameOver || board[index]) return;
 
   board[index] = currentPlayer;
-
-  const cell = document.querySelectorAll('.cell')[index];
-  cell.textContent = currentPlayer;
-  cell.classList.add('taken', currentPlayer.toLowerCase());
+  const cells = document.querySelectorAll('.cell');
+  cells[index].textContent = currentPlayer;
+  cells[index].classList.add('taken', currentPlayer.toLowerCase());
 
   const winningCells = checkWinner();
 
   if (winningCells) {
     gameOver = true;
-    winningCells.forEach(i => document.querySelectorAll('.cell')[i].classList.add('win'));
-    document.getElementById('status-msg').textContent = currentPlayer + ' wins! 🎉';
-
+    winningCells.forEach(i => cells[i].classList.add('win'));
+    scores[currentPlayer]++;
+    updateScores();
+    setStatus(currentPlayer + ' wins! 🎉');
   } else if (board.every(c => c !== null)) {
     gameOver = true;
-    document.getElementById('status-msg').textContent = "It's a draw!";
-
+    setStatus("It's a draw!");
   } else {
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-    document.getElementById('status-msg').textContent = currentPlayer + "'s turn";
+    setStatus(currentPlayer + "'s turn");
   }
 }
 
@@ -194,15 +167,22 @@ function checkWinner() {
   return null;
 }
 
+function setStatus(msg) {
+  document.getElementById('status-msg').textContent = msg;
+}
+
+function updateScores() {
+  document.getElementById('score-x').textContent = scores.X;
+  document.getElementById('score-o').textContent = scores.O;
+}
+
 function resetGame() {
   board = Array(9).fill(null);
   currentPlayer = 'X';
   gameOver = false;
-
   document.querySelectorAll('.cell').forEach(cell => {
     cell.textContent = '';
     cell.className = 'cell';
   });
-
-  document.getElementById('status-msg').textContent = "Your turn (X)";
+  setStatus("X's turn");
 }

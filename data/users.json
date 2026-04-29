@@ -1,1 +1,23 @@
-[] 
+[
+  {
+    "username": "myles123",
+    "password": "1234",
+    "wins": 0,
+    "losses": 0,
+    "draws": 0
+  },
+  {
+    "username": "myles125",
+    "password": "1256",
+    "wins": 0,
+    "losses": 0,
+    "draws": 0
+  },
+  {
+    "username": "myles6",
+    "password": "1289",
+    "wins": 0,
+    "losses": 0,
+    "draws": 0
+  }
+]

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-//  MAIN.JS — Auth + Game logic
+//  MAIN.JS — Auth only (game logic is in game.js)
 // ═══════════════════════════════════════════════════════
 
 // ── ON PAGE LOAD ─────────────────────────────────────────
@@ -24,7 +24,7 @@ function showTab(tab) {
   document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
   document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
   document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('tab-register').classList.toggle('active', tab !== 'login');
   clearMessages();
 }
 
@@ -32,7 +32,7 @@ function showGameScreen(username) {
   document.getElementById('player-name').textContent = username;
   document.getElementById('player-initial').textContent = username.charAt(0).toUpperCase();
   showScreen('game-screen');
-  resetGame();
+  initGame(); // defined in game.js
 }
 
 // ── MESSAGES ─────────────────────────────────────────────
@@ -116,73 +116,4 @@ async function handleLogout() {
   clearMessages();
   showTab('login');
   showScreen('auth-screen');
-}
-
-// ═══════════════════════════════════════════════════════
-//  GAME LOGIC
-// ═══════════════════════════════════════════════════════
-
-let board = Array(9).fill(null);
-let currentPlayer = 'X';
-let gameOver = false;
-let scores = { X: 0, O: 0 };
-
-const WIN_PATTERNS = [
-  [0,1,2],[3,4,5],[6,7,8],
-  [0,3,6],[1,4,7],[2,5,8],
-  [0,4,8],[2,4,6]
-];
-
-function handleMove(index) {
-  if (gameOver || board[index]) return;
-
-  board[index] = currentPlayer;
-  const cells = document.querySelectorAll('.cell');
-  cells[index].textContent = currentPlayer;
-  cells[index].classList.add('taken', currentPlayer.toLowerCase());
-
-  const winningCells = checkWinner();
-
-  if (winningCells) {
-    gameOver = true;
-    winningCells.forEach(i => cells[i].classList.add('win'));
-    scores[currentPlayer]++;
-    updateScores();
-    setStatus(currentPlayer + ' wins! 🎉');
-  } else if (board.every(c => c !== null)) {
-    gameOver = true;
-    setStatus("It's a draw!");
-  } else {
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-    setStatus(currentPlayer + "'s turn");
-  }
-}
-
-function checkWinner() {
-  for (const [a, b, c] of WIN_PATTERNS) {
-    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return [a, b, c];
-    }
-  }
-  return null;
-}
-
-function setStatus(msg) {
-  document.getElementById('status-msg').textContent = msg;
-}
-
-function updateScores() {
-  document.getElementById('score-x').textContent = scores.X;
-  document.getElementById('score-o').textContent = scores.O;
-}
-
-function resetGame() {
-  board = Array(9).fill(null);
-  currentPlayer = 'X';
-  gameOver = false;
-  document.querySelectorAll('.cell').forEach(cell => {
-    cell.textContent = '';
-    cell.className = 'cell';
-  });
-  setStatus("X's turn");
 }

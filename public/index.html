@@ -7,43 +7,39 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
   <!-- AUTH SCREEN -->
   <div id="auth-screen" class="screen">
     <div class="auth-card">
       <h1 class="logo">✕ ○</h1>
       <p class="tagline">Tic Tac Toe</p>
-
       <div class="tabs">
         <button class="tab active" id="tab-login" onclick="showTab('login')">Login</button>
         <button class="tab" id="tab-register" onclick="showTab('register')">Register</button>
       </div>
-
       <div id="login-form" class="form-section">
         <div class="field">
           <label for="login-username">Username</label>
-          <input type="text" id="login-username" placeholder="Enter your username" />
+          <input type="text" id="login-username" placeholder="Enter your username" value="myles123" />
         </div>
         <div class="field">
           <label for="login-password">Password</label>
-          <input type="password" id="login-password" placeholder="Enter your password" />
+          <input type="password" id="login-password" placeholder="Enter your password" value="12345" />
         </div>
         <div id="login-message" class="message"></div>
         <button class="btn-primary" onclick="handleLogin()">Login</button>
       </div>
-
       <div id="register-form" class="form-section hidden">
         <div class="field">
           <label for="reg-username">Username</label>
-          <input type="text" id="reg-username" placeholder="Choose a username" />
+          <input type="text" id="reg-username" placeholder="Choose a username" value="myles123" />
         </div>
         <div class="field">
           <label for="reg-password">Password</label>
-          <input type="password" id="reg-password" placeholder="Choose a password" />
+          <input type="password" id="reg-password" placeholder="Choose a password" value="1234" />
         </div>
         <div class="field">
           <label for="reg-confirm">Confirm Password</label>
-          <input type="password" id="reg-confirm" placeholder="Repeat your password" />
+          <input type="password" id="reg-confirm" placeholder="Repeat your password" value="1234" />
         </div>
         <div id="register-message" class="message"></div>
         <button class="btn-primary" onclick="handleRegister()">Create Account</button>
@@ -54,8 +50,6 @@
   <!-- GAME SCREEN -->
   <div id="game-screen" class="screen hidden">
     <div class="game-wrapper">
-
-      <!-- Top bar with username -->
       <div class="topbar">
         <div class="user-badge">
           <div class="avatar" id="player-initial">?</div>
@@ -63,10 +57,7 @@
         </div>
         <button class="btn-logout" onclick="handleLogout()">Logout</button>
       </div>
-
       <h2 class="game-title">Tic Tac Toe</h2>
-
-      <!-- Scoreboard -->
       <div class="scoreboard">
         <div class="score-box">
           <span class="score-label x-color">X</span>
@@ -78,26 +69,23 @@
           <span class="score-num" id="score-o">0</span>
         </div>
       </div>
-
       <p id="status-msg" class="status-msg">X's turn</p>
-
-      <!-- Board -->
       <div class="board" id="board">
-        <div class="cell" onclick="handleMove(0)"></div>
-        <div class="cell" onclick="handleMove(1)"></div>
-        <div class="cell" onclick="handleMove(2)"></div>
-        <div class="cell" onclick="handleMove(3)"></div>
-        <div class="cell" onclick="handleMove(4)"></div>
-        <div class="cell" onclick="handleMove(5)"></div>
-        <div class="cell" onclick="handleMove(6)"></div>
-        <div class="cell" onclick="handleMove(7)"></div>
-        <div class="cell" onclick="handleMove(8)"></div>
+        <div class="cell" onclick="cellClicked(0)"></div>
+        <div class="cell" onclick="cellClicked(1)"></div>
+        <div class="cell" onclick="cellClicked(2)"></div>
+        <div class="cell" onclick="cellClicked(3)"></div>
+        <div class="cell" onclick="cellClicked(4)"></div>
+        <div class="cell" onclick="cellClicked(5)"></div>
+        <div class="cell" onclick="cellClicked(6)"></div>
+        <div class="cell" onclick="cellClicked(7)"></div>
+        <div class="cell" onclick="cellClicked(8)"></div>
       </div>
-
       <button class="btn-primary" style="max-width:200px" onclick="resetGame()">New Game</button>
     </div>
   </div>
 
   <script src="main.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ let currentPlayer = 'X';
 let gameActive = true;
 let lastWinner = null;
 let lastDraw = false;
+let vsAI = false;
 
 const winConditions = [
   [0,1,2],[3,4,5],[6,7,8],
@@ -24,8 +25,16 @@ function initGame() {
   });
 }
 
-function cellClicked(index) {
+function toggleMode() {
+  vsAI = !vsAI;
+  document.getElementById('mode-btn').textContent = vsAI ? 'Mode: PvAI' : 'Mode: PvP';
+  document.getElementById('difficulty').style.display = vsAI ? 'inline-block' : 'none';
+  initGame();
+}
+
+async function cellClicked(index) {
   if (!gameActive || board[index] !== '') return;
+
   board[index] = currentPlayer;
   const cell = document.querySelectorAll('.cell')[index];
   cell.textContent = currentPlayer;
@@ -52,6 +61,25 @@ function cellClicked(index) {
 
   currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
   document.getElementById('status-msg').textContent = `${currentPlayer}'s turn`;
+
+  if (vsAI && currentPlayer === 'O') {
+    gameActive = false;
+    document.getElementById('status-msg').textContent = 'AI is thinking...';
+    const difficulty = document.getElementById('difficulty').value;
+    const res = await fetch('/ai-move', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ board, difficulty })
+    });
+    const data = await res.json();
+    gameActive = true;
+
+    if (data.comment) {
+      document.getElementById('status-msg').textContent = `AI: ${data.comment}`;
+    }
+
+    setTimeout(() => cellClicked(data.move), 50);
+  }
 }
 
 function checkWinner() {
@@ -75,7 +103,7 @@ async function saveGame() {
   btn.disabled = true;
   btn.textContent = 'Saving...';
   try {
-    const res = await fetch('/save-game-test', {
+    const res = await fetch('/save-game', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ winner: lastWinner, draw: lastDraw, board })

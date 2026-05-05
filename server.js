@@ -72,18 +72,22 @@ app.post("/logout", (req, res) => {
   });
 });
 
-app.post("/save-game-test", (req, res) => {
+app.post("/save-game", (req, res) => {
   const { winner, draw, board } = req.body;
   const games = readGames();
   games.push({
     id: Date.now(),
-    player: "test",
+    player: req.session.username || "guest",
     winner: draw ? "draw" : winner,
     board,
     date: new Date().toISOString(),
   });
   fs.writeFileSync(GAMES_FILE, JSON.stringify(games, null, 2));
   res.json({ success: true });
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(PORT, () => {

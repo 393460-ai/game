@@ -80,8 +80,15 @@
         <div class="cell" onclick="cellClicked(7)"></div>
         <div class="cell" onclick="cellClicked(8)"></div>
       </div>
-      <button class="btn-primary" style="max-width:200px" onclick="resetGame()">New Game</button>
-      <button class="btn-secondary" style="max-width:200px" id="save-btn" onclick="saveGame()" disabled>Save Game</button>
+       <button class="btn-primary" style="max-width:200px" onclick="resetGame()">New Game</button>
+       <button class="btn-primary" style="max-width:200px" id="save-btn" onclick="saveGame()" disabled>Save Game</button>
+        <button class="btn-primary" style="max-width:200px" onclick="toggleMode()" id="mode-btn">Mode: PvP</button>
+        <select id="difficulty" style="padding:10px;border-radius:8px;font-size:1rem;font-weight:bold;border:none;cursor:pointer;display:none;">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </select>
     </div>
   </div>
   <script src="main.js"></script>

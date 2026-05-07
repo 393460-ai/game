@@ -29,12 +29,12 @@ function toggleMode() {
   vsAI = !vsAI;
   document.getElementById('mode-btn').textContent = vsAI ? 'Mode: PvAI' : 'Mode: PvP';
   document.getElementById('difficulty').style.display = vsAI ? 'inline-block' : 'none';
+  document.getElementById('personality').style.display = vsAI ? 'inline-block' : 'none';
   initGame();
 }
 
 async function cellClicked(index) {
   if (!gameActive || board[index] !== '') return;
-
   board[index] = currentPlayer;
   const cell = document.querySelectorAll('.cell')[index];
   cell.textContent = currentPlayer;
@@ -66,11 +66,14 @@ async function cellClicked(index) {
     gameActive = false;
     document.getElementById('status-msg').textContent = 'AI is thinking...';
     const difficulty = document.getElementById('difficulty').value;
+    const personality = document.getElementById('personality').value;
+
     const res = await fetch('/ai-move', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ board, difficulty })
+      body: JSON.stringify({ board, difficulty, personality })
     });
+
     const data = await res.json();
     gameActive = true;
 
@@ -78,7 +81,7 @@ async function cellClicked(index) {
       document.getElementById('status-msg').textContent = `AI: ${data.comment}`;
     }
 
-    setTimeout(() => cellClicked(data.move), 50);
+    setTimeout(() => cellClicked(data.move), 0);
   }
 }
 

@@ -1,5 +1,4 @@
 modules = ["nodejs-24"]
-run = "node server.js"
 
 [deployment]
 router = "application"
@@ -12,25 +11,10 @@ env = { "CI" = "true" }
 [workflows]
 runButton = "Project"
 
-[[workflows.workflow]]
-name = "Project"
-author = "agent"
-mode = "sequential"
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "node server.js"
-
-[workflows.workflow.tasks.env]
-PORT = "8080"
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[[ports]]
-localPort = 3000
-externalPort = 80
-
-[[ports]]
-localPort = 8081
-externalPort = 8081
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000

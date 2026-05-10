@@ -1,5 +1,6 @@
 modules = ["nodejs-24"]
 run = "node server.js"
+
 [deployment]
 router = "application"
 deploymentTarget = "autoscale"
@@ -9,16 +10,12 @@ args = ["pnpm", "store", "prune"]
 env = { "CI" = "true" }
 
 [workflows]
-runButton = "artifacts/api-server: API Server"
+runButton = "Project"
 
 [[workflows.workflow]]
-name = "artifacts/api-server: API Server"
+name = "Project"
 author = "agent"
 mode = "sequential"
-
-[workflows.workflow.metadata]
-outputType = "webview"
-artifactId = "3B4_FFSkEVBkAeYMFRJ2e"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
@@ -27,33 +24,13 @@ args = "node server.js"
 [workflows.workflow.tasks.env]
 PORT = "8080"
 
-[[workflows.workflow]]
-name = "artifacts/mockup-sandbox: Component Preview Server"
-author = "agent"
-mode = "sequential"
-
 [workflows.workflow.metadata]
 outputType = "webview"
-artifactId = "XegfDyZt7HqfW2Bb8Ghoy"
-isCanvasWorkflow = true
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "pnpm --filter @workspace/mockup-sandbox run dev"
-cwd = "./artifacts/mockup-sandbox"
-waitForPort = 8081
-
-[workflows.workflow.tasks.env]
-PORT = "8081"
-BASE_PATH = "/__mockup"
-
-[[ports]]
-localPort = 8080
+[[[ports]]
+localPort = 3000
 externalPort = 80
 
 [[ports]]
 localPort = 8081
 externalPort = 8081
-
-[agent]
-expertMode = true
